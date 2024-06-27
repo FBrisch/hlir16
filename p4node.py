@@ -753,9 +753,36 @@ def deep_copy(node, seen_ids = [], on_error = lambda x: None):
         new_p4node.set_vec([deep_copy(elem, seen_ids + [node.id]) for elem in node.vec])
 
     for d in node.xdir(details=False):
+        #if type(node.get_attr(d)) == P4Node and d not in ['ref', 'type_ref', 'header_ref', 'field_ref', 'control','all_nodes']:
+        #    new_p4node.set_attr(d, deep_copy(node.get_attr(d), seen_ids + [node.id]))
+        #else:
+            new_p4node.set_attr(d, node.get_attr(d))
+
+    return new_p4node
+
+
+
+def deep_copy_with_details(node, seen_ids = [], on_error = lambda x: None):
+    new_p4node = P4Node({'node_type': 'DEEP_COPIED_NODE'})
+    new_p4node.is_copied = True
+
+    if node.id in seen_ids:
+        on_error(node.id)
+
+    for c in node.__dict__:
+        if c not in node.xdir(details=True) and not c.startswith("__"):
+            new_p4node.set_attr(c, node.get_attr(c))
+
+    if node.is_vec():
+        new_p4node.set_vec([deep_copy(elem, seen_ids + [node.id]) for elem in node.vec])
+
+    for d in node.xdir(details=True):
         if type(node.get_attr(d)) == P4Node and d not in ['ref', 'type_ref', 'header_ref', 'field_ref', 'control']:
             new_p4node.set_attr(d, deep_copy(node.get_attr(d), seen_ids + [node.id]))
         else:
             new_p4node.set_attr(d, node.get_attr(d))
 
     return new_p4node
+    
+    
+    
