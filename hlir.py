@@ -91,7 +91,7 @@ def p4_to_json(p4_filename, json_filename=None, p4_version=16, p4c_path=None, op
 
         p4_version = ext_to_vsn[ext] if ext in ext_to_vsn else 16
 
-    p4test = os.path.join(p4c_path, "build", "p4test")
+    p4test = os.path.join(p4c_path,  "p4test")
     p4include = os.path.join(p4c_path, "p4include")
 
     cmd_opts = ['--p4v', f'{p4_version}'] if p4_version is not None else []
