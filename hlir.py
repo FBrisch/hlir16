@@ -100,7 +100,7 @@ def p4_to_json(p4_filename, json_filename=None, p4_version=16, p4c_path=None, op
     for dir in p4_include_dirs:
         cmd_opts += ['-I', dir]
 
-    base_cmd = f'{p4test} {p4_filename} --toJSON {json_filename} --Wdisable=unused'.split(' ')
+    base_cmd = f'{p4test} {p4_filename} --toJSON {json_filename} --Wdisable=unused --excludeFrontendPasses UniqueNames,SimplifyParsers'.split(' ') #,MoveDeclarations,Inline,InlineActions,InlineFunctions,LocalizeAllActions
     errcode = subprocess.call(base_cmd + cmd_opts)
 
     return json_filename if errcode == 0 else None
